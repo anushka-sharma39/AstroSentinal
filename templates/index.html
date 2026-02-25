@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AstroSentinel | Mission Control</title>
+    <style>
+        body { background: #0b0d17; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; }
+        .header { background: #1a1d2e; padding: 20px; border-bottom: 2px solid #00d4ff; }
+        .mission-box { background: #161b22; border: 2px solid #00d4ff; padding: 20px; margin: 20px auto; width: 70%; border-radius: 10px; }
+        input { padding: 10px; margin: 5px; border-radius: 5px; border: 1px solid #444; background: #0d1117; color: white; }
+        button { background: #00d4ff; color: black; padding: 10px 20px; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; }
+        table { margin: 20px auto; border-collapse: collapse; width: 90%; background: #161b22; }
+        th, td { border: 1px solid #30363d; padding: 12px; }
+        .HIGH { background-color: #7a1a1a; color: #ff4d4d; font-weight: bold; }
+        .MEDIUM { color: #ffa500; }
+        .LOW { color: #00ff00; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🛰️ ASTRO SENTINEL</h1>
+        <p>Real-Time Orbital Collision Avoidance System</p>
+    </div>
+
+    <div class="mission-box">
+        <h2>🚀 Launch Mission Planner</h2>
+        <p>Enter your startup's satellite target coordinates to check against live NORAD debris data.</p>
+        <form action="/check" method="post">
+            <input type="text" name="name" placeholder="Satellite Name" required>
+            <input type="number" name="x" placeholder="Target X (km)" required>
+            <input type="number" name="y" placeholder="Target Y (km)" required>
+            <input type="number" name="z" placeholder="Target Z (km)" required>
+            <button type="submit">ANALYZE LAUNCH SAFETY</button>
+        </form>
+    </div>
+
+    <table>
+        <tr>
+            <th>Object Name</th>
+            <th>3D Position (X, Y, Z)</th>
+            <th>Proximity (km)</th>
+            <th>Risk Status</th>
+        </tr>
+        {% for item in results %}
+        <tr class="{{ item.risk }}">
+            <td>{{ item.data.id }}</td>
+            <td>({{ item.data.x|round(1) }}, {{ item.data.y|round(1) }}, {{ item.data.z|round(1) }})</td>
+            <td>{{ item.dist }} km</td>
+            <td>{{ item.risk }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
